@@ -1,0 +1,74 @@
+@import '../../style/variables.scss';
+
+header{
+    .header__wrapper{
+        display: flex;
+        justify-content: space-between;
+        font-family: 'Roboto Condensed';
+        font-style: normal;
+        font-weight: bold;
+    }
+    h1{
+        font-size: 28px;
+        line-height: 33px;
+        span{
+            color: $main-color;
+        }
+        a:hover{
+            text-decoration: none;
+        }
+    }
+    
+    .nav{
+        &__menu{
+            padding-top: 5px;
+            display: flex;
+            flex-direction: row;
+            font-size: 24px;
+            line-height: 28px;
+            margin: 0;
+        }
+        &__item{
+            list-style-type: none;
+            &-active a{
+                color: $main-color;
+            }
+        }
+    }
+
+    a{
+        text-decoration: none;
+        color: #000;
+    }
+
+    .header{
+        &__comics{
+            margin-top: 50px;
+            width: 100%;
+            height: 100px;
+            background: #232222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        &__left{
+            margin-left: 50px;
+            width: 152px;
+            height: 100px;
+        }
+        &__text{
+            margin-left: 83px;
+            margin-right: auto;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 28px;
+            color: #fff;
+        }
+        &__right{
+            margin-right: 25px;
+            width: 133px;
+            height: 100px;
+        }
+    }
+}

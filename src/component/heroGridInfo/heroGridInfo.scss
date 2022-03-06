@@ -1,0 +1,77 @@
+@import '../../style/variables.scss';
+
+.heroGridInfo{
+    z-index: 1;
+    &__container{
+        padding: 25px;
+        margin-top: 50px;
+        width: 100%;
+        height: 763px;
+        background: #FFFFFF;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+    }
+    &__wrapper{
+        display: flex;
+        justify-content:space-between;
+    }
+    &__btnWrapper{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-right: auto;
+        margin-left: 25px;
+    }
+    &__img{
+        width: 150px;
+        height: 150px;
+    }
+    &__name{
+        font-family: Roboto Condensed;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 22px;
+        line-height: 26px;
+        text-transform: uppercase;
+    }
+    &__descrp{
+        margin-top: 15px;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+    }
+    &__list{
+        margin: 0;
+        padding: 0;
+        margin-top: 15px;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 21px;
+    }
+    &__item{
+        padding: 0 10px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        list-style-type: none;
+        width: 375px;
+        height: 25px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    &__link{
+        color: #000;
+        text-decoration: none;
+        &:hover{
+            cursor: pointer;
+            text-decoration: underline;
+            color: $main-color;
+        }
+    }
+    
+}

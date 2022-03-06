@@ -1,12 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './style/style.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import vision from "./resources/img/vision.png"
+
+import AppHeader from './component/appHeader/AppHeader'
+import RandomSection from './component/randomSection/RandomSection';
+import HeroesGrid from './component/heroesGrid/HeroesGrid';
+import AppComics from './component/appComics/AppComics';
+import SingleComics from './component/singleComics/SingleComics';
+import HeroPage from './component/heroPage/HeroPage';
+
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <div className="container">
+      <AppHeader/>
+      {/* <RandomSection/>
+      <HeroesGrid/>
+      <footer>
+        <img src={vision} alt="" className="footer__vision" />
+      </footer> */}
+      {/* <SingleComics/> */}
+      <HeroPage/>
+    </div>
   </React.StrictMode>,
   document.getElementById('root')
 );

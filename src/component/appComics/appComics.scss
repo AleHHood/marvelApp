@@ -1,0 +1,55 @@
+@import '../../style/variables.scss';
+
+.comics{
+    width: 100%;
+    &__list{
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    &__item{
+        width: 225px;
+        height: 415px;
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        margin-top: 55px;
+    }
+    &__img{
+        transition: 0.25s all;
+        filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.25));
+        width: 225px;
+        height: 346px;
+        margin-bottom: 10px;
+        &:hover{
+            transform: translateY(-5px);
+            filter: drop-shadow(0px 5px 20px #9F0013);
+        }
+    }
+    &__link{
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 16px;
+        color: #000000;
+        text-transform: uppercase;
+        text-decoration: none;
+        &:hover{
+            color: $main-color;
+            text-decoration: underline;
+        }
+    }
+    &__price{
+        display: block;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 16px;
+        color: rgba(0, 0, 0, 0.6);
+        margin-top: 5px;
+    }
+
+}
