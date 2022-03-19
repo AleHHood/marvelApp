@@ -93,4 +93,29 @@
     &:hover {
         transform: translateY(-5px);
     }
+    &-noActive{
+        :hover{
+            cursor:progress;
+            transform: translateY(0px);
+        }
+        &::after {
+            background-color: $grey;
+        }
+        &::before {
+            background-color: $grey;
+        }
+        .inner {
+            position: relative;
+            background-color: $grey;
+            &::before {
+                border-color: $grey transparent;
+            }
+            &::after {
+                border-color: $grey transparent;
+            }
+        }
+    }
+    &.button-noActive::before, &.button-noActive::after {
+        background-color: $grey;
+    }
 }

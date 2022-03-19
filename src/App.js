@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import AppHeader from './component/appHeader/AppHeader'
+import RandomSection from './component/randomSection/RandomSection';
+import HeroesGrid from './component/heroesGrid/HeroesGrid';
+import AppComics from './component/appComics/AppComics';
+import SingleComics from './component/singleComics/SingleComics';
+import HeroPage from './component/heroPage/HeroPage';
+import './App.scss';
+import vision from './resources/img/vision.png'
+import ErrorBoundary from './component/errorBoundary/ErrorBoundary';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <AppHeader/>
+      <ErrorBoundary><RandomSection/></ErrorBoundary>
+      <ErrorBoundary><HeroesGrid/></ErrorBoundary>
+      <footer>
+        <img src={vision} alt="" className="footer__vision" />
+      </footer>
+      {/* <SingleComics/> */}
+      {/* <HeroPage/> */}
     </div>
   );
 }
