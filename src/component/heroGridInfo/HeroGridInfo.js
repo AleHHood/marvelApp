@@ -1,6 +1,7 @@
 import './heroGridInfo.scss'
 import AppModal from "../appModal/AppModal";
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErorrMessge from '../erorrMessge/ErorrMessge';
@@ -116,7 +117,6 @@ class HeroGridInfo extends Component{
 const View = (propsView) => {
     const {char: {name, thumbnail, description, wiki, homepage}} = propsView;
     
-
     return(
         <>
             <div className="heroGridInfo__wrapper">
@@ -141,6 +141,10 @@ const View = (propsView) => {
         </>
     )
 }
+
+HeroGridInfo.propTypes = {
+    activeId: PropTypes.number
+  };
 
 
 export default HeroGridInfo;

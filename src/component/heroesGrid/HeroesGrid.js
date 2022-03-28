@@ -25,12 +25,17 @@ class HeroesGrid extends Component {
 
     componentDidMount() {
         this.updateCharacters()
+        window.addEventListener('scroll', this.onScrollLoading)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScrollLoading)
     }
 
     marvelService = new MarvelService();
 
     onRequest = () => {
-        if(!this.state.loadingMoreItems){
+        if(!this.state.loadingMoreItems && !this.state.loading){
             this.setState({loadingMoreItems: true})
             this.updateCharacters()
         }
@@ -72,9 +77,34 @@ class HeroesGrid extends Component {
         )
     }
 
+    refArr = []
 
-    onGetIdCharacter = (id) => {
-        this.setState({activeId: id})
+    onRefItemHero = (itemHero) => {
+        this.refArr.push(itemHero);
+    }
+
+    onActiveItem = (activeItem) => {
+        this.refArr.forEach((ref) =>{
+            ref.classList.remove('heroesGrid__item-active');
+        })
+
+        activeItem.classList.add('heroesGrid__item-active')
+    }
+
+
+    onGetIdCharacter = (id, e) => {
+
+        if(e.code === 'Enter' || e.type === 'click'){
+            this.onActiveItem(e.currentTarget)
+            this.setState({activeId: id})
+        }     
+    }
+
+    //Метод до загрузки элементов по скролу
+    onScrollLoading = ()=> {
+        if(document.documentElement.scrollHeight <= document.documentElement.clientHeight + window.scrollY + 50){
+            this.onRequest()
+        }
     }
 
     //Метод создания контента (таблицы героев)
@@ -85,7 +115,12 @@ class HeroesGrid extends Component {
             
             const {name, thumbnail, id} = char;
             return(
-                <li key = {id} className="heroesGrid__item" onClick={() => this.onGetIdCharacter(id)}>
+                <li key = {id} className="heroesGrid__item" 
+                    tabIndex={0}
+                    onClick={(e) => this.onGetIdCharacter(id, e)}
+                    onKeyDown={(e) => this.onGetIdCharacter(id, e)}
+                    ref={this.onRefItemHero}>
+
                     <img src={thumbnail} alt={name} className="heroesGrid__img" />
                     <p className="heroesGrid__name">{name}</p>
                 </li>
@@ -99,8 +134,8 @@ class HeroesGrid extends Component {
         const {error, loading, activeId, loadingMoreItems, charListEnded} = this.state;
         const errorMessage = error ? <ErorrMessge/> : null;
         const spinner = loading ? <Spinner/> : null;
-        const loadClass = loadingMoreItems ? 'button-noActive' : null;
         const content = !(loading || error) ? this.renderHeroes() : '';
+        const spinnerLoadMore = loadingMoreItems ? <Spinner/> : null;
         const endedClass = charListEnded ? 'none' : 'block';
 
         return(
@@ -115,10 +150,11 @@ class HeroesGrid extends Component {
                 <ErrorBoundary>
                     <HeroGridInfo activeId={activeId}/>
                 </ErrorBoundary>
-                <a onClick={this.onRequest} className={`button button__long button__main ` + loadClass} 
+{/*                 <a onClick={this.onRequest} className={`button button__long button__main ` + loadClass} 
                     style={{'display': endedClass}}>
                     <div className="inner">load more</div>
-                </a>
+                </a> */}
+                {spinnerLoadMore}
             </section>
         )
     }
