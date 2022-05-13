@@ -1,6 +1,6 @@
 import './heroGridInfo.scss'
 import AppModal from "../appModal/AppModal";
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
@@ -8,58 +8,44 @@ import ErorrMessge from '../erorrMessge/ErorrMessge';
 import Skeleton from '../skeleton/Skeleton';
 import { maxComicsName, maxComicsItems } from '../../services/constant';
 
-class HeroGridInfo extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            char: null,
-            loading: false,
-            error: false,
+
+const HeroGridInfo = (props) => {
+
+    const [char, setChar] = useState(null);
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
+    
+    const marvelService = new MarvelService();
+
+    useEffect(()=> {
+        if(props.activeId){
+            updateCharacter();
         }
-    }
+    }, [props.activeId])
 
-    componentDidUpdate(prevProps){
-        if(prevProps.activeId !== this.props.activeId){
-            this.updateCharacter();
-        }
-    }
-
-    marvelService = new MarvelService();
-
-    updateCharacter = () => {
-
-        this.setState({loading: true}, () => {
-            this.marvelService.getCharacter(this.props.activeId)
-            .then(res => this.onCharLoaded(res))
-            .catch(this.onError)
-        })
+    function updateCharacter() {
+        setLoading(true)
+        marvelService.getCharacter(props.activeId)
+        .then(res => onCharLoaded(res))
+        .catch(onError)
     }
 
 
-
-    onCharLoaded = (char) => {
-        this.setState({
-            char,
-            loading: false
-            })
+    function onCharLoaded(char) {
+        setChar(char);
+        setLoading(false);
     }
 
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        })
+    function onError(){
+        setLoading(false);
+        setError(true);
     }
 
-    onGetRandomChar = () => {
-        this.updateCharacter();
-    }
 
-    onGetComics = () => {
-        if(!this.state.char) return
+    function onGetComics(){
+        if(!char) return
         
-        const comics = this.state.char.comics;
-
+        const comics = char.comics;
 
         const elements = comics.map((item, i) => {
 
@@ -88,31 +74,28 @@ class HeroGridInfo extends Component{
     }
 
 
-    render(){
-        const {char, error, loading} = this.state;
+    const skeleton = (char || loading || error) ?  null : <Skeleton/>
+    const spinner = loading ? <Spinner/> : null
+    const errorMesage = error ? <ErorrMessge/> : null
+    const content = !(loading || error || skeleton) ? <><View char={char}/> {onGetComics()}</> : null
 
-        const skeleton = (char || loading || error) ?  null : <Skeleton/>
-        const spinner = loading ? <Spinner/> : null
-        const errorMesage = error ? <ErorrMessge/> : null
-        const content = !(loading || error || skeleton) ? <><View char={char}/> {this.onGetComics()}</> : null
-
-        return(
-            <div className="heroGridInfo">
-                <div className="heroGridInfo__container">
-                    {skeleton}
-                    {content}
-                    <div className="heroGridInfo__message">
-                        {spinner}
-                        {errorMesage}
-                    </div>
-                                         
+    return(
+        <div className="heroGridInfo">
+            <div className="heroGridInfo__container">
+                {skeleton}
+                {content}
+                <div className="heroGridInfo__message">
+                    {spinner}
+                    {errorMesage}
                 </div>
-                <AppModal/>
+                                        
             </div>
-        )
-    }
-
+            <AppModal/>
+        </div>
+    )
 }
+
+
 
 const View = (propsView) => {
     const {char: {name, thumbnail, description, wiki, homepage}} = propsView;

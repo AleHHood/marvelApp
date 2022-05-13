@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {Component, useEffect, useState} from "react";
 import './randomSection.scss'
 import randomBg from '../.././resources/img/RandomBg.png'
 import MarvelService from "../../services/MarvelService";
@@ -7,81 +7,68 @@ import ErorrMessge from "../erorrMessge/ErorrMessge";
 
 
 
-class RandomSection extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            char:{},
-            loading: true,
-            error: false
-        }
-    }
+const RandomSection = () => {
 
-    componentDidMount() {
-        this.updateCharacter();
-    }
+    const [char, setChar] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const marvelService = new MarvelService()
 
-    marvelService = new MarvelService();
+    useEffect(()=> {
+        updateCharacter();
+    }, [])
 
-    updateCharacter = () => {
-        this.setState({loading: true}, () => {
-            const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-            this.marvelService.getCharacter(id)
-            .then(res => this.onCharLoaded(res))
-            .catch(this.onError)
-        })
+    
+    function updateCharacter() {
+        setLoading(true);
+        const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        marvelService.getCharacter(id)
+        .then(res => onCharLoaded(res))
+        .catch(onError)
     }
 
 
-
-    onCharLoaded = (char) => {
-        this.setState({
-            char,
-            loading: false
-            })
+    function onCharLoaded(char) {
+        setChar(char)
+        setLoading(false)
     }
 
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        })
+    function onError(){
+        setLoading(false)
+        setError(true)
     }
 
-    onGetRandomChar = () => {
-        this.updateCharacter();
+    function onGetRandomChar(){
+        updateCharacter();
     }
 
-
-    render(){
-        const {char, error, loading} = this.state
-        const spinner = loading ? <Spinner/> : null
-        const errorMesage = error ? <ErorrMessge/> : null
-        const content = !(loading || error) ? <View {...char}/> : null
-        
-        return(
-            <section className="random">
-                <div className="random__hero">
-                    {content}
-                    {spinner}
-                    {errorMesage}
-                </div>
-                <div className="random__choose">
-                    <p className="random__title">
-                        Random character for today!<br/>
-                        Do you want to get to know him better?
-                    </p>
-                    <p className="random__chooseDescrp">
-                        Or choose another one
-                    </p>
-                        <button className="button button__main" onClick={this.onGetRandomChar}>
-                                <div className="inner">Try it</div>
-                        </button>
-                    <img className="random__chooseBg" alt="" src={randomBg}/>
-                </div>
-            </section>
-        )
-    }
+    const spinner = loading ? <Spinner/> : null
+    const errorMesage = error ? <ErorrMessge/> : null
+    const content = !(loading || error) ? <View {...char}/> : null
+    
+    return(
+        <section className="random">
+            <div className="random__hero">
+                {content}
+                {spinner}
+                {errorMesage}
+            </div>
+            <div className="random__choose">
+                <p className="random__title">
+                    Random character for today!<br/>
+                    Do you want to get to know him better?
+                </p>
+                <p className="random__chooseDescrp">
+                    Or choose another one
+                </p>
+                    <button className="button button__main" onClick={onGetRandomChar}>
+                            <div className="inner">Try it</div>
+                    </button>
+                <img className="random__chooseBg" alt="" src={randomBg}/>
+            </div>
+        </section>
+    )
+    
 }
 
 const View = (props) => {
