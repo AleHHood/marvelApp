@@ -1,84 +1,72 @@
-import {Component} from "react";
 import "./appComics.scss"
-import ImgComics from '../../resources/img/UW.png'
+import { useEffect, useState } from "react"
+import useMarvelService from '../../services/MarvelService'
+import Spinner from "../spinner/Spinner";
+import ErorrMessge from "../erorrMessge/ErorrMessge";
+import { comicsOffset } from "../../services/constant";
+import { Link } from "react-router-dom";
 
-class AppComics extends Component{
-    constructor(props){
-        super(props)
-        this.state = {
+const AppComics = () => {
 
-        }
+    const [arrComics, setArrComics] = useState([]);
+    const {loading, error, getAllComics} = useMarvelService();
+    const [offset, setOffset] = useState(+comicsOffset);
+
+    useEffect(() => {
+        updateComics();
+    }, [])
+
+    const updateComics = () => {
+        getAllComics(offset)
+        .then(res => onloaded(res))
+    }
+    
+
+    const onloaded = (res)=> {
+        setOffset(offset + 8);
+        setArrComics([...arrComics, ...res]);
     }
 
-    render(){
-        return(
-            <section className="comics">
-                <ul className="comics__list">
-                    <li className="comics__item">
-                        <a href="" className="comics__link">
-                        <img src={ImgComics} alt="" className="comics__img" />
-                            ULTIMATE X-MEN VOL. 5: ULTIMATE WAR TPB
-                        </a>
-                        <span className="comics__price">9.99$</span>
-                    </li>
-                    <li className="comics__item">
-                        <a href="" className="comics__link">
-                        <img src={ImgComics} alt="" className="comics__img" />
-                            ULTIMATE X-MEN VOL. 5: ULTIMATE WAR TPB
-                        </a>
-                        <span className="comics__price">9.99$</span>
-                    </li>
-                    <li className="comics__item">
-                        <a href="" className="comics__link">
-                        <img src={ImgComics} alt="" className="comics__img" />
-                            ULTIMATE X-MEN VOL. 5: ULTIMATE WAR TPB
-                        </a>
-                        <span className="comics__price">9.99$</span>
-                    </li>
+    //Функция рендоринга комиксов
+    const renderComics = () => {
+        const comics = arrComics.map((data, i) => {
+            const {id, title, image, price} = data;
 
-                    <li className="comics__item">
-                        <a href="" className="comics__link">
-                        <img src={ImgComics} alt="" className="comics__img" />
-                            ULTIMATE X-MEN VOL. 5: ULTIMATE WAR TPB
-                        </a>
-                        <span className="comics__price">9.99$</span>
-                    </li>
-                    <li className="comics__item">
-                        <a href="" className="comics__link">
-                        <img src={ImgComics} alt="" className="comics__img" />
-                            ULTIMATE X-MEN VOL. 5: ULTIMATE WAR TPB
-                        </a>
-                        <span className="comics__price">9.99$</span>
-                    </li>
-                    <li className="comics__item">
-                        <a href="" className="comics__link">
-                        <img src={ImgComics} alt="" className="comics__img" />
-                            ULTIMATE X-MEN VOL. 5: ULTIMATE WAR TPB
-                        </a>
-                        <span className="comics__price">9.99$</span>
-                    </li>
+            return(
+            <li className="comics__item" key={id}>
+                <Link to={`/comics/${id}`} className="comics__link">
+                <img src={image} alt={title} className="comics__img" />
+                    {title}
+                </Link>
+                <span className="comics__price">{price}</span>
+            </li>)
+        })
 
-                    <li className="comics__item">
-                        <a href="" className="comics__link">
-                        <img src={ImgComics} alt="" className="comics__img" />
-                            ULTIMATE X-MEN VOL. 5: ULTIMATE WAR TPB
-                        </a>
-                        <span className="comics__price">9.99$</span>
-                    </li>
-                    <li className="comics__item">
-                        <a href="" className="comics__link">
-                        <img src={ImgComics} alt="" className="comics__img" />
-                            ULTIMATE X-MEN VOL. 5: ULTIMATE WAR TPB
-                        </a>
-                        <span className="comics__price">9.99$</span>
-                    </li>
-                </ul>
-                <button className="button button__long button__main">
-                    <div className="inner">load more</div>
-                </button>
-            </section>
-        )
+        return comics
     }
+
+    //LoadMore
+
+    const loadMoreComics = () => {
+        updateComics();
+        
+    }
+
+    const spinner = (loading && !error) ? <Spinner/> : null
+    const errorMsg = error ? <ErorrMessge/> : null
+
+    return(
+        <section className="comics">
+            <ul className="comics__list">
+                {renderComics()}
+                {spinner}
+                {errorMsg}
+            </ul>
+            <button className="button button__long button__main" onClick={() => loadMoreComics()}>
+                <div className="inner">load more</div>
+            </button>
+        </section>
+    )
 }
 
 export default AppComics

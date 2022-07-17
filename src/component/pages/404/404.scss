@@ -1,0 +1,26 @@
+@import "../../../style/variables.scss";
+
+.No-match{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    margin: 70px 0;
+    width: 100%;
+    height: 450px;
+    h2{
+        display: block;
+        font-size: 404px;
+        line-height: 0.74;
+    }
+    &__link{
+        display: block;
+        font-size: 30px;
+        text-decoration: none;
+        color: #000;
+        &:hover{
+            color: $main-color;
+        }
+    }
+}

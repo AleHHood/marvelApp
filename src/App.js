@@ -1,24 +1,30 @@
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
 import AppHeader from './component/appHeader/AppHeader'
-import RandomSection from './component/randomSection/RandomSection';
-import HeroesGrid from './component/heroesGrid/HeroesGrid';
-import AppComics from './component/appComics/AppComics';
-import SingleComics from './component/singleComics/SingleComics';
 import HeroPage from './component/heroPage/HeroPage';
 import './App.scss';
-import vision from './resources/img/vision.png'
-import ErrorBoundary from './component/errorBoundary/ErrorBoundary';
+import MainPage from "./component/pages/MainPage";
+import ComicsPage from './component/pages/ComicsPage';
+import NoMatch404 from "./component/pages/404/404";
+import ComicPage from "./component/pages/ComicPage/ComicPage";
 
 function App() {
   return (
     <div className="container">
-      <AppHeader/>
-      <ErrorBoundary><RandomSection/></ErrorBoundary>
-      <ErrorBoundary><HeroesGrid/></ErrorBoundary>
-      <footer>
-        <img src={vision} alt="" className="footer__vision" />
-      </footer>
-      {/* <SingleComics/> */}
-      {/* <HeroPage/> */}
+      
+      <Router>
+        <AppHeader/>
+        
+        <Routes>
+          <Route path="/" element={<MainPage/>} />
+          <Route path="/comics" element={<ComicsPage/>}/>
+          <Route path="*" element={<NoMatch404/>}></Route>
+          <Route path="/comics/:comicId" element={<ComicPage/>}></Route>
+        </Routes>
+      </Router>
     </div>
   );
 }

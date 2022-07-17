@@ -1,7 +1,7 @@
-import {Component, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import './randomSection.scss'
 import randomBg from '../.././resources/img/RandomBg.png'
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
 import Spinner from "../../component/spinner/Spinner.js";
 import ErorrMessge from "../erorrMessge/ErorrMessge";
 
@@ -10,9 +10,7 @@ import ErorrMessge from "../erorrMessge/ErorrMessge";
 const RandomSection = () => {
 
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    const marvelService = new MarvelService()
+    const {loading, error, clearError, getCharacter} = useMarvelService();
 
     useEffect(()=> {
         updateCharacter();
@@ -20,26 +18,10 @@ const RandomSection = () => {
 
     
     function updateCharacter() {
-        setLoading(true);
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        marvelService.getCharacter(id)
-        .then(res => onCharLoaded(res))
-        .catch(onError)
-    }
-
-
-    function onCharLoaded(char) {
-        setChar(char)
-        setLoading(false)
-    }
-
-    function onError(){
-        setLoading(false)
-        setError(true)
-    }
-
-    function onGetRandomChar(){
-        updateCharacter();
+        clearError();
+        getCharacter(id)
+        .then(res => setChar(res))
     }
 
     const spinner = loading ? <Spinner/> : null
@@ -61,7 +43,7 @@ const RandomSection = () => {
                 <p className="random__chooseDescrp">
                     Or choose another one
                 </p>
-                    <button className="button button__main" onClick={onGetRandomChar}>
+                    <button className="button button__main" onClick={updateCharacter}>
                             <div className="inner">Try it</div>
                     </button>
                 <img className="random__chooseBg" alt="" src={randomBg}/>
@@ -89,9 +71,7 @@ const View = (props) => {
                 </a>
                 </div>
             </div>
-        </>
-
-        
+        </>        
     )
 }
 

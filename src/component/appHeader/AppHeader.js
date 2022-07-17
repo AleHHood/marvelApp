@@ -1,20 +1,23 @@
 import './appHeader.scss';
 import leftImg from '../../resources/img/Avengers.png'
 import rightImg from '../../resources/img/AvengersLogo.png'
+import { NavLink, Link } from 'react-router-dom';
 
 const AppHeader = ()=> {
     return(
         <header>
             <div className="header__wrapper">
-                <h1><a href=""><span>Marvel</span> information portal</a></h1>
+                <h1><Link to="/"><span>Marvel</span> information portal</Link></h1>
                 <nav>
                     <ul className='nav__menu'>
-                        <li className='nav__item nav__item-active'>
-                            <a href="">Characters</a>
+                        <li className='nav__item'>
+                            <NavLink end to="/" 
+                            style={({ isActive }) => ({ color: isActive ? '#9F0013' : '#000' })}>Characters</NavLink>
                         </li>
                             <span className="nav_separator">/</span>
                         <li className='nav__item'>
-                            <a href="">Comics</a>
+                            <NavLink to="/comics" 
+                            style={({ isActive }) => ({ color: isActive ? '#9F0013' : '#000' })}>Comics</NavLink>
                         </li>
                     </ul>
                 </nav>

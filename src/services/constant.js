@@ -7,5 +7,10 @@
     //Максимальное число комиксов в инфе о герое на главной странице
     const maxComicsItems = 12;
 
+    //---------------Comics-----------------//
 
-export {maxComicsName, maxHeroDescrp, maxComicsItems, offset}
+    //Отступ комиксов по умолчанию
+    const comicsOffset = 200;
+
+
+export {maxComicsName, maxHeroDescrp, maxComicsItems, offset, comicsOffset}

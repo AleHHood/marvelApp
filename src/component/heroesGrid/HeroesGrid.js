@@ -1,8 +1,8 @@
-import { Component, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./heroesGrid.scss";
 
 import HeroGridInfo from "../heroGridInfo/HeroGridInfo";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
 import ErorrMessge from "../erorrMessge/ErorrMessge";
 import Spinner from "../spinner/Spinner";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
@@ -11,14 +11,11 @@ import { func } from "prop-types";
 
 const HeroesGrid = () => {
   const [arrChar, setArrChar] = useState([]);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [activeId, setActiveId] = useState(null);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [offset, setOffset] = useState(defOffset);
   const [charListEnded, setCharEnd] = useState(false);
 
-  const marvelService = new MarvelService();
+  const {loading, error, getAllCharacters} = useMarvelService();
 
   useEffect(() => {
     updateCharacters();
@@ -32,26 +29,16 @@ const HeroesGrid = () => {
   });
 
   function onRequest() {
-    if (!loadingMore && !loading) {
-      setLoadingMore(true);
+    if (!loading) {
       updateCharacters();
     }
   }
 
   function updateCharacters() {
-    marvelService
-      .getAllCharacters(offset)
+      getAllCharacters(offset)
       .then((arrChar) => {
         onloading(arrChar);
-      })
-      .catch(() => {
-        onError();
       });
-  }
-
-  function onError() {
-    setLoading(false);
-    setError(true);
   }
 
   function onloading(nextArrChar) {
@@ -61,9 +48,6 @@ const HeroesGrid = () => {
     }
 
     setArrChar((arrChar) => [...arrChar, ...nextArrChar]);
-    setError(false);
-    setLoading(false);
-    setLoadingMore(false);
     setOffset((offset) => offset + 9);
     setCharEnd(ended);
   }
@@ -123,8 +107,6 @@ const HeroesGrid = () => {
 
   const errorMessage = error ? <ErorrMessge /> : null;
   const spinner = loading ? <Spinner /> : null;
-  const content = !(loading || error) ? renderHeroes() : "";
-  const spinnerLoadMore = loadingMore ? <Spinner /> : null;
   const endedClass = charListEnded ? "none" : "block";
 
   return (
@@ -132,9 +114,10 @@ const HeroesGrid = () => {
       <ul className="heroesGrid__list">
         <div className="heroesGrid__wrapper">
           {errorMessage}
-          {spinner}
+          
         </div>
-        {content}
+        {renderHeroes()}
+        {spinner}
       </ul>
       <ErrorBoundary>
         <HeroGridInfo activeId={activeId} />
@@ -143,7 +126,6 @@ const HeroesGrid = () => {
                 style={{'display': endedClass}}>
                 <div className="inner">load more</div>
             </a> */}
-      {spinnerLoadMore}
     </section>
   );
 };
